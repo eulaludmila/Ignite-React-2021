@@ -1,2 +1,2 @@
-# Ingite-React-2021
+# Ignite-React-2021
 Todos os projetos realizados durante o Ignite da Rocketseat
