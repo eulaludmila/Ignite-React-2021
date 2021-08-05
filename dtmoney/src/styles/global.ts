@@ -71,6 +71,15 @@ export const GlobalStyle = createGlobalStyle`
     border-radius: 0.25rem;
   }
 
+  .react-modal-content-confirmation{
+    width: 100%;
+    max-width: 400px;
+    background: var(--background);
+    padding: 3rem;
+    position: relative;
+    border-radius: 0.25rem;
+  }
+
   .react-modal-close{
     position: absolute;
     right: 1.5rem;
