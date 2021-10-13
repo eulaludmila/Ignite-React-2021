@@ -9,7 +9,7 @@ export async function saveSubscription(
 ) {
   //Buscar o usuário no banco do FaunaDB com o id customerId
   //Salvar os dados da subscription do usuário na FaunaDB
-  const userRef = await fauna.query(
+  const userRef = await fauna.query(//pegar a referência
     q.Select(
       "ref",
       q.Get(
@@ -19,7 +19,7 @@ export async function saveSubscription(
       )
     )
   )
-
+  //pegar todos os dados da subscriptions
   const subscription = await stripe.subscriptions.retrieve(subscriptionId)
 
   const subscriptionData = {

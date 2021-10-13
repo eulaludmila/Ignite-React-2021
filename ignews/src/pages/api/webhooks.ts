@@ -68,7 +68,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse){
             )
             break;
           case 'checkout.session.completed':
-
+          //tipar ela para sabeer o que tem dentro dela
           const checkoutSession = event.data.object as Stripe.Checkout.Session;
             await saveSubscription(
               checkoutSession.subscription.toString(),
