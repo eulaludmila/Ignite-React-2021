@@ -15,6 +15,46 @@ export default NextAuth({
   ],
   //função executada de forma automática depois que acontece uma ação, no caso a de login
   callbacks: {
+    async session(session){
+    //Verificar se existe um usuário e se está ativo
+      try {
+        const userActiveSubscription = await fauna.query(
+          q.Get( //buscar
+           q.Intersection( //onde aceita a condição de duas requisições
+            q.Match(//uma subscription que bate o index com a ref
+              q.Index('subscription_by_user_ref'), //com o index
+              q.Select(//buscar a ref
+                "ref",
+                q.Get(//no qual vai pegar
+                  q.Match(//o indice que bate com o email (where)
+                    q.Index('user_by_email'),
+                    q.Casefold(session.user.email)
+                  )
+                )
+              )
+            ),
+            q.Match( //E também faz o match entre o status da subscription seja ativo
+              q.Index('subscription_by_status'),
+              "active"
+            )
+           )
+          )
+        )
+        console.log('entrou: ', session);
+        
+      //retorna a sessão com o status do subscription
+      return {
+        ...session,
+        activeSubscription: userActiveSubscription
+      }
+      } catch (error) {
+        return {
+          ...session,
+          activeSubscription: null
+        }
+      }
+
+    },
     async signIn(user, account, profile){
       const {email} = user;
       

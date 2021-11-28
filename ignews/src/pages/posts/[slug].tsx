@@ -36,8 +36,20 @@ export default function Post({post}: PostProps){
 }
 
 export const getServerSideProps: GetServerSideProps = async ({req, params}) => {
+  
+  //Recuperar a sessão do usuário
   const session = await getSession({req});
   const { slug } = params;
+  console.log('session: ', session)
+  //Se na sessão do usuário ele não tiver inscricão ativada
+  if(!session?.activeSubscription){
+    return{
+      redirect: {
+        destination: `/posts/preview/${slug}`,
+        permanent: false,
+      }
+    }
+  }
 
   const prismic = getPrismicClient(req);
   const response = await prismic.getByUID('post', String(slug), {});
@@ -51,7 +63,6 @@ export const getServerSideProps: GetServerSideProps = async ({req, params}) => {
       year: 'numeric'
     })
   };
-
 
   return {
     props: {
