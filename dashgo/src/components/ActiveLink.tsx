@@ -8,9 +8,11 @@ interface ActiveLinkProps extends LinkProps{
   shouldMatchExactHref?: boolean;
 }
 
+//shouldMatchExactHref - parametro para caso a url tenha que ser exatamente igual
 export function ActiveLink({ children, shouldMatchExactHref = false, ...rest}: ActiveLinkProps) {
   let isActive = false;
   const {asPath} = useRouter();
+  console.log("shouldMatchExactHref: ", shouldMatchExactHref)
 
   if(shouldMatchExactHref && (asPath === rest.href || asPath === rest.as)) {
     isActive = true;
