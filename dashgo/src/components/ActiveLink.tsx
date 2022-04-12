@@ -12,7 +12,6 @@ interface ActiveLinkProps extends LinkProps{
 export function ActiveLink({ children, shouldMatchExactHref = false, ...rest}: ActiveLinkProps) {
   let isActive = false;
   const {asPath} = useRouter();
-  console.log("shouldMatchExactHref: ", shouldMatchExactHref)
 
   if(shouldMatchExactHref && (asPath === rest.href || asPath === rest.as)) {
     isActive = true;
