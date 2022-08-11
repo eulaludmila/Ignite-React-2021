@@ -1,4 +1,4 @@
-import { createServer, Factory, Model } from 'miragejs';
+import { createServer, Factory, Model, Response } from 'miragejs';
 import { faker } from '@faker-js/faker'
 
 type User = {
@@ -40,7 +40,24 @@ export function makeServer() {
       this.namespace = 'api';
       this.timing = 750;
 
-      this.get('/users');
+      //fazer paginção usando a função
+      this.get('/users', function (schema, request) {
+        const { page = 1, per_page = 10} = request.queryParams;
+
+        const total = schema.all('user').length
+
+        /*Página 2 = 10 - 20*/
+        const pageStart = (Number(page) - 1) * Number(per_page);
+        const pageEnd = pageStart + Number(per_page);
+
+        const users = this.serialize(schema.all('user'))
+                      .users.slice(pageStart, pageEnd)
+        return new Response(
+          200,
+          { 'x-total-count': String(total) },
+          { users }
+        )
+      });
       this.post('/users');
 
       // vai resetar o nome, para não prejudiar rotas de api no next

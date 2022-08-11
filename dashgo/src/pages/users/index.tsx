@@ -7,28 +7,13 @@ import Pagination from "../../components/Pagination";
 import { Sidebar } from "../../components/Sidebar";
 import { useQuery } from 'react-query'
 import { api } from "../../services/api";
+import { useUsers } from "../../services/hooks/useUsers";
+
 
 export default function UserList() {
+  
   // users - nome da chave que vai ser armazenada no cache do front-end
-  const { data, isLoading, isFetching, error } = useQuery('users', async () => {
-    const { data } = await api.get('users');
-
-    const users = data.users.map(user => {
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: new Date(user.createdAt).toLocaleDateString('pt-BR', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
-        }),
-      }
-    });
-    return users;
-  }, {
-    staleTime: 1000 * 5, // 5 seconds sem ser carregada
-  });
+  const { data, isLoading, isFetching, error } = useUsers();
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -95,7 +80,7 @@ export default function UserList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.map(user => (
+                  {data?.map(user => (
                     <Tr key={user.id}>
                       <Td px={["4", "4", "6"]}>
                         <Checkbox colorScheme="pink" />
