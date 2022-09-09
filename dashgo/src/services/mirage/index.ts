@@ -31,7 +31,7 @@ export function makeServer() {
 
     // criar dados quando o mirage inicializa
     seeds(server) {
-      server.createList('user', 10)
+      server.createList('user', 90)
     },
 
     // quais rotas vou ter
