@@ -1,4 +1,4 @@
-import { createServer, Factory, Model, Response } from 'miragejs';
+import { createServer, Factory, Model, Response, ActiveModelSerializer } from 'miragejs';
 import { faker } from '@faker-js/faker'
 
 type User = {
@@ -9,6 +9,10 @@ type User = {
 
 export function makeServer() {
   const server = createServer({
+    serializers: {
+      application: ActiveModelSerializer
+    },
+
     // quais dados quero armazernar no banco
     models: {
       // Partial - usar parte dos dados
@@ -51,13 +55,15 @@ export function makeServer() {
         const pageEnd = pageStart + Number(per_page);
 
         const users = this.serialize(schema.all('user'))
-                      .users.slice(pageStart, pageEnd)
+                      .users
+                      .slice(pageStart, pageEnd)
         return new Response(
           200,
           { 'x-total-count': String(total) },
           { users }
         )
       });
+      this.get('/users/:id');
       this.post('/users');
 
       // vai resetar o nome, para não prejudiar rotas de api no next
