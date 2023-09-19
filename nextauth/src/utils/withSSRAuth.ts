@@ -1,13 +1,22 @@
 //função para páginas que só possam acessadas por visitantes
 
+import { AuthTokenError } from "@/pages/AuthTokenError";
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from "next";
-import { parseCookies } from "nookies";
+import { destroyCookie, parseCookies } from "nookies";
+import decode from "jwt-decode";
+import { validateUserPermissions } from "./validateUserPermissions";
 
-export function withSSRAuth<P extends { [key: string]: any; }>(fn: GetServerSideProps<P>): GetServerSideProps {
+type WithSSRAuthOptions = {
+  permissions?: string[];
+  roles?: string[]
+}
+
+export function withSSRAuth<P extends { [key: string]: any; }>(fn: GetServerSideProps<P>, options?: WithSSRAuthOptions): GetServerSideProps {
   return async (ctx: GetServerSidePropsContext): Promise<GetServerSidePropsResult<P>> => {
     const cookies = parseCookies(ctx);
+    const token = cookies['nextauth.token']
 
-    if (!cookies['nextauth.token']) {
+    if (!token) {
       return {
         redirect: {
           destination: '/',
@@ -15,6 +24,45 @@ export function withSSRAuth<P extends { [key: string]: any; }>(fn: GetServerSide
         }
       }
     }
-    return await fn(ctx)
+
+    if (options) {
+      const user = decode<{ permissions: string[], roles: string[] }>(token)
+      const { permissions, roles } = options || {}
+      const userHasValidPermissions = validateUserPermissions({
+        user, permissions, roles
+      })
+
+      if (!userHasValidPermissions) {
+        return {
+          redirect: {
+            destination: '/dashboard',
+            permanent: false
+          }
+        }
+      }
+    }
+
+    try {
+      //Ele chama a função getServerSideProps dentro o dashboard
+      return await fn(ctx)
+    } catch (error) {
+
+      if (error instanceof AuthTokenError) {
+        //Se o error for do tipo AuthTokenError vai retornar true
+        // console.log(error instanceof AuthTokenError)
+        console.log('entrou login');
+
+        destroyCookie(ctx, 'nextauth.token')
+        destroyCookie(ctx, 'nextauth.refreshToken')
+      }
+
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false
+        }
+      }
+    }
+
   }
 }

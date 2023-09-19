@@ -1,4 +1,5 @@
 import { signOut } from '@/context/AuthContext';
+import { AuthTokenError } from '@/pages/AuthTokenError';
 import axios, { Axios, AxiosError } from 'axios';
 import { GetServerSidePropsContext } from 'next';
 import { parseCookies, setCookie } from 'nookies'
@@ -90,6 +91,8 @@ export function setupApiClient(ctx: GetServerSidePropsContext | undefined = unde
       } else {
         if(process.browser){
           signOut()
+        } else {
+          return Promise.reject(new AuthTokenError())
         }
       }
     }
