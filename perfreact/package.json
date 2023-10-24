@@ -10,15 +10,19 @@
     "server": "json-server -d 750 -w -p 3333 ./server.js"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^13.5.6",
     "@opentelemetry/api": "^1.6.0",
+    "lodash": "^4.17.21",
     "next": "13.5.6",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-virtualized": "^9.22.5"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-virtualized": "^9.21.26",
     "eslint": "^8",
     "eslint-config-next": "13.5.6",
     "json-server": "^0.17.4",

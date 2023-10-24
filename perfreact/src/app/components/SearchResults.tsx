@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { ProductItem } from "./ProductItem";
+import { List, AutoSizer, ListRowRenderer } from 'react-virtualized'
 
 interface SearchResultsProps {
   results: Array<{
@@ -19,17 +20,36 @@ export function SearchResults({ results, onAddToWishlist, totalPrice }: SearchRe
   //   }, 0)
   // }, [results])
 
+  const rowRenderer: ListRowRenderer = ({
+    index, key, style
+  }) => {
+    return (
+      <div key={key} style={style}>
+        <ProductItem product={results[index]}
+          onAddToWishlist={onAddToWishlist} />
+      </div>
+    )
+  }
+
   return (
     <div>
       <h2>{totalPrice}</h2>
-      {
-        results.map(product => {
-          return (
-            <ProductItem key={product.id} product={product} 
-            onAddToWishlist={onAddToWishlist}/>
-          );
-        })
-      }
+        {/* Vitualização para scroll infinito em que só apareça itens que cabem na tela */}
+        <AutoSizer>
+          {
+            ({ width, height }) => (
+              <List
+                height={height}
+                rowHeight={30}
+                width={width}
+                overscanRowCount={5}//itens pré carregados
+                rowCount={results.length}
+                rowRenderer={rowRenderer}
+              />
+            )
+          }
+        </AutoSizer>
+
     </div>
   )
 }
