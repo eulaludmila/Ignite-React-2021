@@ -9,12 +9,7 @@ describe('SignInButton component', () => {
   it('renders correctly when user is not authenticated', () => {
     const useSessionMoked = jest.mocked(useSession)
 
-    useSessionMoked.mockResolvedValueOnce({
-      data: {
-        expires: "fake-expires",
-      },
-      status: "unauthenticated",
-    } as any)
+    useSessionMoked.mockReturnValueOnce([null, false])
     render(
       <SignInButton />
     )
@@ -23,15 +18,10 @@ describe('SignInButton component', () => {
 
   it('renders correctly when user is authenticated', () => {
     const useSessionMoked = jest.mocked(useSession)
-    useSessionMoked.mockResolvedValueOnce({
-      data: {
-        session: {
-          user: { name: "John Doe", email: "john.doe@example.com" },
-        },
-        expires: "fake-expires",
-      },
-      status: 'authenticated'
-    } as any)
+    useSessionMoked.mockReturnValueOnce([
+      { user: { name: "John Doe", email: "john.doe@example.com" }, expires: "fake-expires" },
+      false
+    ])
     render(
       <SignInButton />
     )
