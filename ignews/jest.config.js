@@ -9,6 +9,6 @@ module.exports = {
   testEnvironment: 'jsdom', //indica em qual ambiente os testes estão executando
   //jsdom - ele cria uma representação dda dom em js para conseguir entender o que foi e o que não foi renderizado em tela
   moduleNameMapper: {
-    "^.+\\.(scss|css|sass)$": "identify-obj-proxy"
+    "^.+\\.(scss|css|sass)$": "identity-obj-proxy"
   }
 }

@@ -40,7 +40,6 @@ export default NextAuth({
            )
           )
         )
-        console.log('entrou: ', session);
         
       //retorna a sessão com o status do subscription
       return {

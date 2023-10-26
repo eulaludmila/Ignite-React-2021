@@ -40,7 +40,6 @@ export const getServerSideProps: GetServerSideProps = async ({req, params}) => {
   //Recuperar a sessão do usuário
   const session = await getSession({req});
   const { slug } = params;
-  console.log('session: ', session)
   //Se na sessão do usuário ele não tiver inscricão ativada
   if(!session?.activeSubscription){
     return{

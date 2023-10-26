@@ -51,7 +51,6 @@ export const getStaticProps: GetStaticProps = async () => {
     //paginação
     pageSize: 100,
   })
-  console.log('hora: ', response.results);
   
   // console.log(JSON.stringify(response, null, 2))
   const posts = response.results.map(post => {
