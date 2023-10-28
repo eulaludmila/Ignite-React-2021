@@ -20,7 +20,6 @@ describe('ActiveLink component', () => {
         <a>Home</a>
       </ActiveLink>
     )
-
     expect(getByText('Home')).toBeInTheDocument()
   })
 
@@ -30,7 +29,6 @@ describe('ActiveLink component', () => {
         <a>Home</a>
       </ActiveLink>
     )
-
     expect(getByText('Home')).toHaveClass('active')
   })
 

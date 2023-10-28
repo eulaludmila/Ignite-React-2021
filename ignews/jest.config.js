@@ -10,5 +10,13 @@ module.exports = {
   //jsdom - ele cria uma representação dda dom em js para conseguir entender o que foi e o que não foi renderizado em tela
   moduleNameMapper: {
     "^.+\\.(scss|css|sass)$": "identity-obj-proxy"
-  }
+  },
+  collectCoverage: true,
+  collectCoverageFrom: [
+    "src/**/*.{tsx}",
+    "!src/**/*.spec.tsx",
+    "!src/**/*._app.tsx",
+    "!src/**/*._document.tsx",
+  ],
+  coverageReporters : ["lcov", "json"]
 }

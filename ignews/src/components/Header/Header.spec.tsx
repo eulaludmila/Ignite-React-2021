@@ -27,6 +27,9 @@ describe('Header component', () => {
       <Header />
     )
 
+    //retorna uma url ue simula informações da página e como pegar informações em tela
+    screen.logTestingPlaygroundURL()
+
     expect(screen.getByText('Home')).toBeInTheDocument()
     expect(screen.getByText('Posts')).toBeInTheDocument()
   })
